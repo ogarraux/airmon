@@ -21,7 +21,7 @@ func main() {
 		fmt.Println("AM_CONFIG env variable not set")
 		os.Exit(1)
 	}
-	config, err := repositories.NewK8SConfigMapRepo(configMapFilename)
+	config, err := repositories.NewYAMLConfigMapRepo(configMapFilename)
 
 	if err != nil {
 		fmt.Println("Error loading configuration: " + err.Error())

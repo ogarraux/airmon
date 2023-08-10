@@ -9,7 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type K8SConfigMapRepo struct {
+type YAMLConfigMapRepo struct {
 	ConfigMapFilename string
 	ConfigMapYAML     ConfigMapYAML
 }
@@ -31,24 +31,24 @@ type ConfigMapYAML struct {
 }
 
 // Create Repo
-func NewK8SConfigMapRepo(ConfigMapFilename string) (K8SConfigMapRepo, error) {
+func NewYAMLConfigMapRepo(ConfigMapFilename string) (YAMLConfigMapRepo, error) {
 
 	file, err := os.Open(ConfigMapFilename)
 	if err != nil {
-		return K8SConfigMapRepo{}, err
+		return YAMLConfigMapRepo{}, err
 	}
 	defer file.Close()
 
 	content, err := ioutil.ReadAll(file)
 	if err != nil {
-		return K8SConfigMapRepo{}, err
+		return YAMLConfigMapRepo{}, err
 	}
 
 	configYAML := ConfigMapYAML{}
 
 	err = yaml.Unmarshal(content, &configYAML)
 	if err != nil {
-		return K8SConfigMapRepo{}, err
+		return YAMLConfigMapRepo{}, err
 	}
 
 	for _, configDS := range configYAML.Datastores {
@@ -58,13 +58,13 @@ func NewK8SConfigMapRepo(ConfigMapFilename string) (K8SConfigMapRepo, error) {
 	for _, configS := range configYAML.Sensors {
 		fmt.Println("Using sensor " + configS.Name + " of type " + configS.Type + " at URL " + configS.URL)
 	}
-	return K8SConfigMapRepo{
+	return YAMLConfigMapRepo{
 		ConfigMapFilename: ConfigMapFilename,
 		ConfigMapYAML:     configYAML,
 	}, nil
 }
 
-func (kc K8SConfigMapRepo) GetDatastores() []domain.DataStore {
+func (kc YAMLConfigMapRepo) GetDatastores() []domain.DataStore {
 
 	ds := []domain.DataStore{}
 
@@ -79,7 +79,7 @@ func (kc K8SConfigMapRepo) GetDatastores() []domain.DataStore {
 	return ds
 }
 
-func (kc K8SConfigMapRepo) GetSensors() []domain.Sensor {
+func (kc YAMLConfigMapRepo) GetSensors() []domain.Sensor {
 
 	s := []domain.Sensor{}
 
@@ -94,10 +94,10 @@ func (kc K8SConfigMapRepo) GetSensors() []domain.Sensor {
 	return s
 }
 
-func (kc K8SConfigMapRepo) GetMonitorEndpoint() string {
+func (kc YAMLConfigMapRepo) GetMonitorEndpoint() string {
 	return kc.ConfigMapYAML.MonitorEndpoint
 }
 
-func (kc K8SConfigMapRepo) GetInterval() uint {
+func (kc YAMLConfigMapRepo) GetInterval() uint {
 	return kc.ConfigMapYAML.Interval
 }
