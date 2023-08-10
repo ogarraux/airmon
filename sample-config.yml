@@ -1,0 +1,11 @@
+interval: 5
+monitor_endpoint: https://your.uptime.host/api/push/tokenhere
+datastores:
+  - name: dev
+    type: influx
+    url: http://influxdb.host:8086
+    database: airmon
+sensors:
+  - name: air1
+    type: awair
+    url: http://awair.element.ip.address/air-data/latest
