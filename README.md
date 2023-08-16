@@ -14,15 +14,17 @@ The local API has to be enabled on the Awair Element.  Awair has instructions on
 
 By default, configuration will be loaded from a YAML file specified by the AM_CONFIG environment variable.
 
-Also by default, this will run continuously.  You can use `-once` to only collect metrics once, then exist.
+Also by default, this will run continuously.  You can use `-once` to only collect metrics once, then exit.
 
 # Configuration Options
 - Interval - how often to poll API (in seconds)
 - Sensors - list of sensors to collect data from.  Only 'awair' type sensors are supported.
 - Datastores - list of datastores to send collected data to.  Only 'influx' type datastores are supported.
-- Monitor endpoint - endpoint to call each time job runs successfully
+- Monitor endpoint (optional) - endpoint to call each time job runs successfully
 
 An example YAML config file is available [here](./sample-config.yml).
 
 # Monitoring
 I use [Uptime Kuma](https://github.com/louislam/uptime-kuma) to monitor this service and alert if it hasn't run.  If a monitor endpoint is specified in the configuration, airmon will perform an HTTP GET of the specified URL on each run.
+
+This is optional - if the monitor endpoint is not included in the configuration, it will just skip this.
